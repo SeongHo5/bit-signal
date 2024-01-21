@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.2.1'
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.seongho'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    sourceCompatibility = '17'
+}
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+
+    all*.exclude group: 'commons-logging', module: 'commons-logging'
+    all*.exclude group: 'log4j', module: 'log4j'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // SPRING BOOT
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign:4.1.0'
+
+    // LOMBOK
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // DB
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // REDIS
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Test & JUnit5
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation 'org.junit.platform:junit-platform-launcher:1.5.2'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.5.2'
+    testImplementation 'org.projectlombok:lombok'
+    testImplementation 'org.assertj:assertj-core:3.19.0'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
