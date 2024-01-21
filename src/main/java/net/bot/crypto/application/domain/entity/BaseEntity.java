@@ -1,4 +1,4 @@
-package net.bot.crypto.domain.entity;
+package net.bot.crypto.application.domain.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

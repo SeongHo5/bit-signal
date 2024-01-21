@@ -1,6 +1,6 @@
 package net.bot.crypto.application.crypto.service;
 
-import net.bot.crypto.domain.dto.MarketPriceDto;
+import net.bot.crypto.application.domain.dto.MarketPriceDto;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

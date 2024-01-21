@@ -6,11 +6,10 @@ import net.bot.crypto.application.slack.enums.CommandType;
 import net.bot.crypto.application.slack.event.SlackNotificationEvent;
 import net.bot.crypto.application.slack.repository.SlackNotificationHistoryRepository;
 import net.bot.crypto.application.slack.service.SlackFeignClient;
-import net.bot.crypto.domain.dto.SlackMessageRequest;
-import net.bot.crypto.domain.entity.SlackNotificationHistory;
+import net.bot.crypto.application.domain.dto.SlackMessageRequest;
+import net.bot.crypto.application.domain.entity.SlackNotificationHistory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import static net.bot.crypto.application.slack.constant.SlackContstant.ARGUMENTS_SEPARATOR;
 

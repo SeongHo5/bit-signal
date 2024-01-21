@@ -1,7 +1,7 @@
 package net.bot.crypto.application.slack.service;
 
 import net.bot.crypto.application.config.feign.SlackFeignConfig;
-import net.bot.crypto.domain.dto.SlackMessageRequest;
+import net.bot.crypto.application.domain.dto.SlackMessageRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;

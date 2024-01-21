@@ -1,7 +1,7 @@
 package net.bot.crypto.application.config;
 
-import com.seongho.spring.config.properties.RedisProperties;
 import lombok.RequiredArgsConstructor;
+import net.bot.crypto.application.config.properties.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisPassword;

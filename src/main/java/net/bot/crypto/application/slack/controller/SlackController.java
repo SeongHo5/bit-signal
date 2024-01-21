@@ -2,7 +2,7 @@ package net.bot.crypto.application.slack.controller;
 
 import lombok.RequiredArgsConstructor;
 import net.bot.crypto.application.slack.service.SlackService;
-import net.bot.crypto.domain.dto.SlashCommandRequest;
+import net.bot.crypto.application.domain.dto.SlashCommandRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

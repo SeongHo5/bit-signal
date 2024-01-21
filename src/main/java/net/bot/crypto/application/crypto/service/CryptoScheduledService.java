@@ -6,7 +6,7 @@ import net.bot.crypto.application.common.service.RedisService;
 import net.bot.crypto.application.common.service.SchedulingService;
 import net.bot.crypto.application.slack.enums.CommandType;
 import net.bot.crypto.application.slack.event.SlackNotificationEvent;
-import net.bot.crypto.domain.dto.MarketPriceDto;
+import net.bot.crypto.application.domain.dto.MarketPriceDto;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 

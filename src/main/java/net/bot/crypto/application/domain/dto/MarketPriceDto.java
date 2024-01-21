@@ -1,4 +1,4 @@
-package net.bot.crypto.domain.dto;
+package net.bot.crypto.application.domain.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
