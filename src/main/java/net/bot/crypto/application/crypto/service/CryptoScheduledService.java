@@ -6,7 +6,7 @@ import net.bot.crypto.application.common.service.RedisService;
 import net.bot.crypto.application.common.service.SchedulingService;
 import net.bot.crypto.application.slack.enums.CommandType;
 import net.bot.crypto.application.slack.event.SlackNotificationEvent;
-import net.bot.crypto.application.domain.dto.MarketPriceDto;
+import net.bot.crypto.application.domain.dto.MarketPrice;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -50,13 +50,13 @@ public class CryptoScheduledService {
      * 거래 가격을 조회하고, 목표가에 도달했는지 확인한다.
      */
     private void fetchTradePrice() {
-        List<MarketPriceDto> response = upbitClient.getCandlesMinutes(1, MARKET_BTC, 1);
+        List<MarketPrice> response = upbitClient.getCandlesMinutes(1, MARKET_BTC, 1);
         BigDecimal tradePrice = response.get(0).tradePrice();
         checkIfReachedTargetPrice(tradePrice);
     }
 
     private void fetchCurrencyInfo() {
-        List<MarketPriceDto> response = upbitClient.getCandlesMinutes(1, MARKET_BTC, 1);
+        List<MarketPrice> response = upbitClient.getCandlesMinutes(1, MARKET_BTC, 1);
         BigDecimal tradePrice = response.get(0).tradePrice();
         String message = "현재가: " + tradePrice;
         publishNotificationEvent(INFO, message);

@@ -1,6 +1,6 @@
 package net.bot.crypto.application.crypto.service;
 
-import net.bot.crypto.application.domain.dto.MarketPriceDto;
+import net.bot.crypto.application.domain.dto.MarketPrice;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,7 +15,7 @@ public interface UpbitFeignClient {
     String getMarketAll(@RequestParam("isDetails") boolean isDetails);
 
     @GetMapping("/candles/minutes/{unit}")
-    List<MarketPriceDto> getCandlesMinutes(
+    List<MarketPrice> getCandlesMinutes(
             @PathVariable("unit") int unit,
             @RequestParam("market") String market,
             @RequestParam("count") int count

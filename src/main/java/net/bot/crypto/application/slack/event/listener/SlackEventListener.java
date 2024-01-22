@@ -6,7 +6,7 @@ import net.bot.crypto.application.slack.enums.CommandType;
 import net.bot.crypto.application.slack.event.SlackNotificationEvent;
 import net.bot.crypto.application.slack.repository.SlackNotificationHistoryRepository;
 import net.bot.crypto.application.slack.service.SlackFeignClient;
-import net.bot.crypto.application.domain.dto.SlackMessageRequest;
+import net.bot.crypto.application.domain.dto.RequestSlackMessage;
 import net.bot.crypto.application.domain.entity.SlackNotificationHistory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -26,7 +26,7 @@ public class SlackEventListener {
         String channelId = getChannelId(event);
         saveNotificationHistory(event, channelId);
 
-        SlackMessageRequest request = new SlackMessageRequest(channelId, event.getMessage());
+        RequestSlackMessage request = new RequestSlackMessage(channelId, event.getMessage());
 
         slackClient.postMessage(request);
     }

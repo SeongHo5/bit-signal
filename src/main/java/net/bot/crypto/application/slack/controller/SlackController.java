@@ -1,8 +1,8 @@
 package net.bot.crypto.application.slack.controller;
 
 import lombok.RequiredArgsConstructor;
-import net.bot.crypto.application.slack.service.SlackService;
 import net.bot.crypto.application.domain.dto.SlashCommandRequest;
+import net.bot.crypto.application.slack.service.SlackService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,12 +18,12 @@ public class SlackController {
 
     @PostMapping("/slash-command")
     public ResponseEntity<String> handleSlashCommand(
-            final @RequestParam("channel_id") String channelId,
-            final @RequestParam("channel_name") String channelName,
-            final @RequestParam("user_id") String userId,
-            final @RequestParam("user_name") String userName,
-            final @RequestParam("command") String command,
-            final @RequestParam("text") String text
+            @RequestParam("channel_id") final String channelId,
+            @RequestParam("channel_name") final String channelName,
+            @RequestParam("user_id") final String userId,
+            @RequestParam("user_name") final String userName,
+            @RequestParam("command") final String command,
+            @RequestParam("text") final String text
     ) {
         SlashCommandRequest commandDto =
                 new SlashCommandRequest(
