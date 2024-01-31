@@ -7,6 +7,8 @@ public final class SlackContstant {
     }
 
     public static final String COMMAND_PREFIX = "/";
+
+    public static final String COMMAND_MARKET_LIST = "market";
     public static final String COMMAND_INFO = "info";
     public static final String COMMAND_ALARM = "alarm";
     public static final String COMMAND_STOP = "stop";
