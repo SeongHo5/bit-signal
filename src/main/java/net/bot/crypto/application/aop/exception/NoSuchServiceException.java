@@ -1,4 +1,4 @@
-package net.bot.crypto.application.common.exception;
+package net.bot.crypto.application.aop.exception;
 
 public class NoSuchServiceException extends ApiException {
     public NoSuchServiceException(ExceptionStatus exceptionStatus) {

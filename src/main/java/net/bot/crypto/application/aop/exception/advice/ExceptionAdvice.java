@@ -1,7 +1,7 @@
-package net.bot.crypto.application.common.advice;
+package net.bot.crypto.application.aop.exception.advice;
 
 import lombok.extern.slf4j.Slf4j;
-import net.bot.crypto.application.common.exception.ApiException;
+import net.bot.crypto.application.aop.exception.ApiException;
 import net.bot.crypto.core.domain.response.ErrorResponse;
 import net.bot.crypto.core.domain.response.ResponseHandler;
 import org.springframework.http.HttpStatus;

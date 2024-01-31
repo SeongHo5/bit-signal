@@ -1,4 +1,4 @@
-package net.bot.crypto.application.common.exception;
+package net.bot.crypto.application.aop.exception;
 
 public class ServiceFailedException extends ApiException {
     public ServiceFailedException(ExceptionStatus exceptionStatus) {
