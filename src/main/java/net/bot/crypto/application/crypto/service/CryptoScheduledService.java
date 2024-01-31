@@ -63,7 +63,7 @@ public class CryptoScheduledService {
     }
 
     private void checkIfReachedTargetPrice(BigDecimal tradePrice) {
-        String data = redisService.getData(CommandType.ALARM.getPrefix());
+        String data = redisService.getData(CommandType.ALARM.getPrefix(), String.class);
         String targetPrice = parseAlarmData(data);
 
         boolean isReached = tradePrice.compareTo(new BigDecimal(targetPrice)) >= 0;

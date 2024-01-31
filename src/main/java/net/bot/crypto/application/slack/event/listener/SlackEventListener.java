@@ -33,7 +33,7 @@ public class SlackEventListener {
 
     private String getChannelId(SlackNotificationEvent event) {
         String key = event.getType().getPrefix();
-        String data = redisService.getData(key);
+        String data = redisService.getData(key, String.class);
         if (key.equals(CommandType.ALARM.getPrefix())) {
             return parseAlarmData(data);
         }
