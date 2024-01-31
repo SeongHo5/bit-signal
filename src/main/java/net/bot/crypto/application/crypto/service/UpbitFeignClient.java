@@ -1,5 +1,6 @@
 package net.bot.crypto.application.crypto.service;
 
+import net.bot.crypto.application.domain.dto.MarketList;
 import net.bot.crypto.application.domain.dto.MarketPrice;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,7 +13,7 @@ import java.util.List;
 public interface UpbitFeignClient {
 
     @GetMapping("/market/all")
-    String getMarketAll(@RequestParam("isDetails") boolean isDetails);
+    List<MarketList> getMarketAll(@RequestParam("isDetails") boolean isDetails);
 
     @GetMapping("/candles/minutes/{unit}")
     List<MarketPrice> getCandlesMinutes(
