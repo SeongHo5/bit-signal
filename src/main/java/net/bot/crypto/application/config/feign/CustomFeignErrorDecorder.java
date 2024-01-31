@@ -3,9 +3,9 @@ package net.bot.crypto.application.config.feign;
 import feign.Response;
 import feign.RetryableException;
 import feign.codec.ErrorDecoder;
-import net.bot.crypto.application.common.exception.ServiceFailedException;
+import net.bot.crypto.application.aop.exception.ServiceFailedException;
 
-import static net.bot.crypto.application.common.exception.ExceptionStatus.*;
+import static net.bot.crypto.application.aop.exception.ExceptionStatus.*;
 
 
 public class CustomFeignErrorDecorder implements ErrorDecoder {
