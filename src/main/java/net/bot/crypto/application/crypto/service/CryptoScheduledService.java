@@ -4,9 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bot.crypto.application.common.service.RedisService;
 import net.bot.crypto.application.common.service.SchedulingService;
+import net.bot.crypto.application.domain.dto.response.MarketPrice;
+import net.bot.crypto.application.domain.dto.response.TickerMessage;
 import net.bot.crypto.application.slack.enums.CommandType;
 import net.bot.crypto.application.slack.event.SlackNotificationEvent;
-import net.bot.crypto.application.domain.dto.MarketPrice;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,11 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.List;
 
-import static net.bot.crypto.application.slack.constant.SlackContstant.*;
+import static net.bot.crypto.application.crypto.service.CryptoWebSocketHandler.TICKER_KEY;
+import static net.bot.crypto.application.slack.constant.SlackContstant.ARGUMENTS_SEPARATOR;
 import static net.bot.crypto.application.slack.enums.CommandType.ALARM;
 import static net.bot.crypto.application.slack.enums.CommandType.INFO;
+import static net.bot.crypto.application.slack.template.ResponseTemplate.*;
 
 @Service
 @Slf4j
@@ -27,7 +30,6 @@ public class CryptoScheduledService {
     private final SchedulingService schedulingService;
     private final UpbitFeignClient upbitClient;
     private final ApplicationEventPublisher eventPublisher;
-    public static final String MARKET_BTC = "KRW-BTC";
 
     public void startCurrenyInfoTask() {
         schedulingService.startScheduledTask(this::fetchCurrencyInfo, Duration.ofMinutes(1));
@@ -35,47 +37,40 @@ public class CryptoScheduledService {
     }
 
     public void startCurrencyAlarmTask() {
-        schedulingService.startScheduledTask(this::fetchTradePrice, Duration.ofMinutes(1));
+        schedulingService.startScheduledTask(this::fetchTradePrice, Duration.ofSeconds(5));
         publishNotificationEvent(ALARM, MESSAGE_WHEN_ALARM_START);
     }
 
     public void stopScheduledTask() {
         schedulingService.stopScheduledTask();
-        publishNotificationEvent(ALARM, MESSAGE_WHEN_ALARM_STOP);
     }
 
     // ========== PRIVATE METHODS ========== //
+
+    private void fetchCurrencyInfo() {
+        String infoData = redisService.getData(CommandType.INFO.getPrefix(), String.class);
+        List<MarketPrice> response = upbitClient.getCandlesMinutes(1, parseArgumentFromData(infoData), 1);
+        publishNotificationEvent(INFO, createCurrencyInfoResponse(response));
+    }
 
     /**
      * 거래 가격을 조회하고, 목표가에 도달했는지 확인한다.
      */
     private void fetchTradePrice() {
-        List<MarketPrice> response = upbitClient.getCandlesMinutes(1, MARKET_BTC, 1);
-        BigDecimal tradePrice = response.get(0).tradePrice();
-        checkIfReachedTargetPrice(tradePrice);
+        TickerMessage tickerMessage = redisService.getData(TICKER_KEY, TickerMessage.class);
+        String alarmData = redisService.getData(CommandType.ALARM.getPrefix(), String.class);
+        checkIfReachedTargetPrice(tickerMessage.tradePrice(), new BigDecimal(parseArgumentFromData(alarmData)));
     }
 
-    private void fetchCurrencyInfo() {
-        List<MarketPrice> response = upbitClient.getCandlesMinutes(1, MARKET_BTC, 1);
-        BigDecimal tradePrice = response.get(0).tradePrice();
-        String message = "현재가: " + tradePrice;
-        publishNotificationEvent(INFO, message);
-    }
-
-    private void checkIfReachedTargetPrice(BigDecimal tradePrice) {
-        String data = redisService.getData(CommandType.ALARM.getPrefix(), String.class);
-        String targetPrice = parseAlarmData(data);
-
-        boolean isReached = tradePrice.compareTo(new BigDecimal(targetPrice)) >= 0;
+    private void checkIfReachedTargetPrice(BigDecimal tradePrice, BigDecimal targetPrice) {
+        boolean isReached = tradePrice.compareTo(targetPrice) >= 0;
         if (isReached) {
-            String message = "목표가 도달! 현재가: " + tradePrice + ", 목표가: " + targetPrice;
-            publishNotificationEvent(ALARM, message);
+            publishNotificationEvent(ALARM, createAlarmResponse(targetPrice, tradePrice));
         }
     }
 
-    private String parseAlarmData(String data) {
-        String[] parsedData = data.split(ARGUMENTS_SEPARATOR);
-        return parsedData[1];
+    private String parseArgumentFromData(String data) {
+        return data.split(ARGUMENTS_SEPARATOR)[1];
     }
 
     private void publishNotificationEvent(CommandType type, String message) {

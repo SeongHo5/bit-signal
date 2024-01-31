@@ -5,16 +5,15 @@ import lombok.RequiredArgsConstructor;
 import net.bot.crypto.application.common.service.RedisService;
 import net.bot.crypto.application.crypto.service.CryptoScheduledService;
 import net.bot.crypto.application.crypto.service.CryptoService;
-import net.bot.crypto.application.domain.dto.MarketList;
+import net.bot.crypto.application.domain.dto.response.MarketList;
 import net.bot.crypto.application.slack.enums.CommandType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
-import static net.bot.crypto.application.slack.constant.SlackContstant.*;
+import static net.bot.crypto.application.slack.constant.SlackContstant.ARGUMENTS_SEPARATOR;
+import static net.bot.crypto.application.slack.template.ResponseTemplate.*;
 
 @Service
 @Transactional
@@ -27,11 +26,11 @@ public class SlackCommandService {
 
     protected String callMarketListService() {
         List<MarketList> marketList = cryptoService.getMarketAll();
-        return convertTitleToKorean(marketList);
+        return createMarketListResponse(marketList);
     }
 
-    protected String callInfoService(String channelId) {
-        cacheInfoTask(channelId);
+    protected String callInfoService(String channelId, String marketName) {
+        cacheInfoTask(channelId, marketName);
         cryptoScheduledService.startCurrenyInfoTask();
         return MESSAGE_WHEN_INFO_START;
     }
@@ -47,8 +46,9 @@ public class SlackCommandService {
         return MESSAGE_WHEN_ALARM_STOP;
     }
 
-    private void cacheInfoTask(String channelId) {
-        redisService.setData(CommandType.INFO.getPrefix(), channelId);
+    private void cacheInfoTask(String channelId, String marketName) {
+        String value = channelId + ARGUMENTS_SEPARATOR + marketName;
+        redisService.setData(CommandType.INFO.getPrefix(), value);
     }
 
     private void cacheAlarmTask(String channelId, int targetPrice) {
@@ -56,11 +56,5 @@ public class SlackCommandService {
         redisService.setData(CommandType.ALARM.getPrefix(), value);
     }
 
-    private String convertTitleToKorean(List<MarketList> marketLists) {
-        return marketLists.stream()
-                .map(market -> String.format("시장 정보 : %s, 한글명 : %s, 영문명 : %s, 유의 종목 여부 : %s",
-                        market.market(), market.koreanName(), market.englishName(), market.marketWarning()))
-                .collect(Collectors.joining("\n"));
-    }
 
 }

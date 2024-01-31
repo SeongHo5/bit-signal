@@ -2,7 +2,7 @@ package net.bot.crypto.application.slack.service;
 
 import lombok.RequiredArgsConstructor;
 import net.bot.crypto.application.aop.exception.NoSuchServiceException;
-import net.bot.crypto.application.domain.dto.SlashCommandRequest;
+import net.bot.crypto.application.domain.dto.request.RequestSlashCommand;
 import net.bot.crypto.application.domain.entity.SlackCommandHistory;
 import net.bot.crypto.application.slack.repository.SlackCommandHistoryRepository;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class SlackCommandDispatcher {
      * @param request 슬래시 커맨드 정보
      * @return 응답 메시지
      */
-    public String handleSlashCommand(SlashCommandRequest request) {
+    public String handleSlashCommand(RequestSlashCommand request) {
         saveCommandHistory(request);
 
         String channelId = request.channelId();
@@ -37,7 +37,7 @@ public class SlackCommandDispatcher {
 
         return switch (parsedCommand) {
             case COMMAND_MARKET_LIST -> slackCommandService.callMarketListService();
-            case COMMAND_INFO -> slackCommandService.callInfoService(channelId);
+            case COMMAND_INFO -> slackCommandService.callInfoService(channelId, arguments);
             case COMMAND_ALARM -> slackCommandService.callAlarmService(channelId, Integer.parseInt(arguments));
             case COMMAND_STOP -> slackCommandService.stopScheduledTask();
             default -> NO_SUCH_COMMAND.getMessage();
@@ -51,7 +51,7 @@ public class SlackCommandDispatcher {
         throw new NoSuchServiceException(INVALID_INPUT_VALUE);
     }
 
-    private void saveCommandHistory(SlashCommandRequest request) {
+    private void saveCommandHistory(RequestSlashCommand request) {
         SlackCommandHistory history = SlackCommandHistory.of(request);
         historyRepository.save(history);
     }

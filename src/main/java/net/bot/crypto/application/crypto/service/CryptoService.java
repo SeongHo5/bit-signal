@@ -1,7 +1,7 @@
 package net.bot.crypto.application.crypto.service;
 
 import lombok.RequiredArgsConstructor;
-import net.bot.crypto.application.domain.dto.MarketList;
+import net.bot.crypto.application.domain.dto.response.MarketList;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
