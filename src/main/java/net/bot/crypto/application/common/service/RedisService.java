@@ -1,5 +1,6 @@
 package net.bot.crypto.application.common.service;
 
+import io.lettuce.core.RedisException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -67,6 +68,7 @@ public class RedisService {
         if (type.isInstance(result)) {
             return type.cast(result);
         }
-        throw new IllegalArgumentException("Type mismatch! Expected: " + type + ", Actual: " + result.getClass());
+        String message = "예상 :" + type.getName() + ", 실제 :" + result.getClass().getName();
+        throw new RedisException("Redis에 저장된 데이터의 타입이 일치하지 않습니다. - " + message);
     }
 }
