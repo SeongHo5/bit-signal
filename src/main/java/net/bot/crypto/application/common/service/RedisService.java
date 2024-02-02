@@ -15,9 +15,11 @@ public class RedisService {
     private final RedisTemplate<String, Object> redisTemplate;
 
     /**
-     * Redis에서 데이터 가져오기 (다양한 타입 지원)
+     * Redis에서 데이터를 가져옵니다.<br>
      * @param key 가져올 데이터의 Key
-     * @return 데이터
+     * @param type 가져올 데이터의 타입
+     * @return 가져온 데이터
+     * @throws RedisException Redis에 저장된 데이터의 타입과 요청한 타입이 일치하지 않을 경우 발생
      */
     public <T> T getData(String key, Class<T> type) {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
@@ -68,7 +70,7 @@ public class RedisService {
         if (type.isInstance(result)) {
             return type.cast(result);
         }
-        String message = "예상 :" + type.getName() + ", 실제 :" + result.getClass().getName();
-        throw new RedisException("Redis에 저장된 데이터의 타입이 일치하지 않습니다. - " + message);
+        String message = "Expected :" + type.getName() + ", Actual :" + result.getClass().getName();
+        throw new RedisException("Data Type Mismatch - " + message);
     }
 }
