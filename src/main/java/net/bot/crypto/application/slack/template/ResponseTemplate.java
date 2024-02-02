@@ -1,5 +1,7 @@
 package net.bot.crypto.application.slack.template;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import net.bot.crypto.application.domain.dto.response.MarketList;
 import net.bot.crypto.application.domain.dto.response.MarketPrice;
 
@@ -7,18 +9,15 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static net.bot.crypto.application.common.util.BigDecimalUtil.convertBigDecimalToWonFormat;
+import static net.bot.crypto.application.common.util.BigDecimalUtil.formatBigDecimalToKRW;
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ResponseTemplate {
     public static final String MESSAGE_WHEN_INFO_START = "1분마다 시세 정보를 알려드릴게요 :smile:";
     public static final String MESSAGE_WHEN_ALARM_START = "말씀하신 가격에 도달하면 알려드릴게요 :smile:";
     public static final String MESSAGE_WHEN_ALARM_STOP = ":bell: 실행 중인 알람을 모두 중지했어요.";
 
-    private ResponseTemplate() {
-        throw new IllegalStateException("유틸리티 클래스는 인스턴스화할 수 없습니다.");
-    }
-
-    public static String createMarketListResponse(List<MarketList> marketList) {
+    public static String generateMarketListResponse(List<MarketList> marketList) {
         List<MarketList> topTenList = marketList.stream()
                 .limit(10)
                 .toList();
@@ -36,7 +35,7 @@ public final class ResponseTemplate {
     }
 
 
-    public static String createCurrencyInfoResponse(List<MarketPrice> marketPriceList) {
+    public static String generateCurrencyInfoResponse(List<MarketPrice> marketPriceList) {
         MarketPrice marketPrice = marketPriceList.get(0);
         return """
                 :money_mouth_face: %s 시세 정보 :money_mouth_face:
@@ -48,13 +47,13 @@ public final class ResponseTemplate {
                 """
                 .formatted(
                         marketPrice.market(),
-                        convertBigDecimalToWonFormat(marketPrice.tradePrice()),
-                        convertBigDecimalToWonFormat(marketPrice.highPrice()),
-                        convertBigDecimalToWonFormat(marketPrice.lowPrice()),
+                        formatBigDecimalToKRW(marketPrice.tradePrice()),
+                        formatBigDecimalToKRW(marketPrice.highPrice()),
+                        formatBigDecimalToKRW(marketPrice.lowPrice()),
                         marketPrice.candleDateTimeKst());
     }
 
-    public static String createAlarmResponse(BigDecimal targetPrice, BigDecimal tradePrice) {
+    public static String generateAlarmResponse(BigDecimal targetPrice, BigDecimal tradePrice) {
         return """
                 :bell: 알람이 울렸어요! :bell:
                 현재가: %s원
@@ -62,8 +61,8 @@ public final class ResponseTemplate {
                 ========================
                 """
                 .formatted(
-                        convertBigDecimalToWonFormat(tradePrice),
-                        convertBigDecimalToWonFormat(targetPrice));
+                        formatBigDecimalToKRW(tradePrice),
+                        formatBigDecimalToKRW(targetPrice));
     }
 
     private static String convertMarketTitleToKorean(List<MarketList> marketLists) {
