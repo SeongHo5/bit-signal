@@ -49,8 +49,8 @@ public class CryptoScheduledService {
 
     private void fetchCurrencyInfo() {
         String infoData = redisService.getData(CommandType.INFO.getPrefix(), String.class);
-        List<MarketPrice> response = upbitClient.getCandlesMinutes(1, parseArgumentFromData(infoData), 1);
-        publishNotificationEvent(INFO, createCurrencyInfoResponse(response));
+        List<MarketPrice> data = upbitClient.getCandlesMinutes(1, parseArgumentFromData(infoData), 1);
+        publishNotificationEvent(INFO, generateCurrencyInfoResponse(data));
     }
 
     /**
@@ -63,9 +63,9 @@ public class CryptoScheduledService {
     }
 
     private void checkIfReachedTargetPrice(BigDecimal tradePrice, BigDecimal targetPrice) {
-        boolean isReached = tradePrice.compareTo(targetPrice) >= 0;
-        if (isReached) {
-            publishNotificationEvent(ALARM, createAlarmResponse(targetPrice, tradePrice));
+        boolean isReachedTargetPrice = tradePrice.compareTo(targetPrice) >= 0;
+        if (isReachedTargetPrice) {
+            publishNotificationEvent(ALARM, generateAlarmResponse(targetPrice, tradePrice));
         }
     }
 
@@ -73,7 +73,7 @@ public class CryptoScheduledService {
         return data.split(ARGUMENTS_SEPARATOR)[1];
     }
 
-    private void publishNotificationEvent(CommandType type, String message) {
+    protected void publishNotificationEvent(CommandType type, String message) {
         eventPublisher.publishEvent(new SlackNotificationEvent(this, type, message));
     }
 }
