@@ -5,8 +5,12 @@ import lombok.RequiredArgsConstructor;
 import net.bot.crypto.application.common.service.RedisService;
 import net.bot.crypto.application.crypto.service.CryptoScheduledService;
 import net.bot.crypto.application.crypto.service.CryptoService;
+import net.bot.crypto.application.domain.dto.request.RequestSlashCommand;
 import net.bot.crypto.application.domain.dto.response.MarketList;
+import net.bot.crypto.application.domain.entity.SlackCommandHistory;
 import net.bot.crypto.application.slack.enums.CommandType;
+import net.bot.crypto.application.slack.repository.SlackCommandHistoryRepository;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,23 +24,30 @@ import static net.bot.crypto.application.slack.template.ResponseTemplate.*;
 @RequiredArgsConstructor
 public class SlackCommandService {
 
+    private final SlackCommandHistoryRepository historyRepository;
     private final CryptoScheduledService cryptoScheduledService;
     private final CryptoService cryptoService;
     private final RedisService redisService;
 
+    @Async
+    public void saveCommandHistory(RequestSlashCommand request) {
+        SlackCommandHistory history = SlackCommandHistory.of(request);
+        historyRepository.save(history);
+    }
+
     protected String callMarketListService() {
         List<MarketList> marketList = cryptoService.getMarketAll();
-        return createMarketListResponse(marketList);
+        return generateMarketListResponse(marketList);
     }
 
     protected String callInfoService(String channelId, String marketName) {
-        cacheInfoTask(channelId, marketName);
+        storeInfoTaskInCache(channelId, marketName);
         cryptoScheduledService.startCurrenyInfoTask();
         return MESSAGE_WHEN_INFO_START;
     }
 
     protected String callAlarmService(String channelId, int targetPrice) {
-        cacheAlarmTask(channelId, targetPrice);
+        storeAlarmTaskInCache(channelId, targetPrice);
         cryptoScheduledService.startCurrencyAlarmTask();
         return MESSAGE_WHEN_ALARM_START;
     }
@@ -46,15 +57,14 @@ public class SlackCommandService {
         return MESSAGE_WHEN_ALARM_STOP;
     }
 
-    private void cacheInfoTask(String channelId, String marketName) {
+    private void storeInfoTaskInCache(String channelId, String marketName) {
         String value = channelId + ARGUMENTS_SEPARATOR + marketName;
         redisService.setData(CommandType.INFO.getPrefix(), value);
     }
 
-    private void cacheAlarmTask(String channelId, int targetPrice) {
+    private void storeAlarmTaskInCache(String channelId, int targetPrice) {
         String value = channelId + ARGUMENTS_SEPARATOR + targetPrice;
         redisService.setData(CommandType.ALARM.getPrefix(), value);
     }
-
 
 }

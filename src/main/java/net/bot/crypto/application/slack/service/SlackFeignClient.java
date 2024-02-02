@@ -5,6 +5,7 @@ import net.bot.crypto.application.domain.dto.request.RequestSlackMessage;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @FeignClient(name = "slack", url = "https://slack.com/api", configuration = SlackFeignConfig.class)
 public interface SlackFeignClient {
@@ -13,6 +14,6 @@ public interface SlackFeignClient {
     void postMessage(@RequestBody RequestSlackMessage request);
 
     @PostMapping("/conversations.join")
-    void joinChannel(@RequestBody RequestSlackMessage request);
+    void joinChannel(@RequestParam("channel") String channelId);
 
 }

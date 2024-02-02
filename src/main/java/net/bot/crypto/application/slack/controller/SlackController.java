@@ -33,6 +33,6 @@ public class SlackController {
                         userName,
                         command,
                         text);
-        return ResponseEntity.ok(commandDispatcher.handleSlashCommand(commandDto));
+        return ResponseEntity.ok(commandDispatcher.handleSlashCommandInternal(commandDto));
     }
 }

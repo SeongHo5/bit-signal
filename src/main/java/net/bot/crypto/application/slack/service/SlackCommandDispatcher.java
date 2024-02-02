@@ -3,20 +3,16 @@ package net.bot.crypto.application.slack.service;
 import lombok.RequiredArgsConstructor;
 import net.bot.crypto.application.aop.exception.NoSuchServiceException;
 import net.bot.crypto.application.domain.dto.request.RequestSlashCommand;
-import net.bot.crypto.application.domain.entity.SlackCommandHistory;
-import net.bot.crypto.application.slack.repository.SlackCommandHistoryRepository;
 import org.springframework.stereotype.Service;
 
 import static net.bot.crypto.application.aop.exception.ExceptionStatus.INVALID_INPUT_VALUE;
 import static net.bot.crypto.application.aop.exception.ExceptionStatus.NO_SUCH_COMMAND;
 import static net.bot.crypto.application.slack.constant.SlackContstant.*;
-
 @Service
 @RequiredArgsConstructor
 public class SlackCommandDispatcher {
 
     private final SlackCommandService slackCommandService;
-    private final SlackCommandHistoryRepository historyRepository;
 
 
     /**
@@ -28,8 +24,8 @@ public class SlackCommandDispatcher {
      * @param request 슬래시 커맨드 정보
      * @return 응답 메시지
      */
-    public String handleSlashCommand(RequestSlashCommand request) {
-        saveCommandHistory(request);
+    public String handleSlashCommandInternal(RequestSlashCommand request) {
+        slackCommandService.saveCommandHistory(request);
 
         String channelId = request.channelId();
         String parsedCommand = parseCommand(request.command());
@@ -51,8 +47,5 @@ public class SlackCommandDispatcher {
         throw new NoSuchServiceException(INVALID_INPUT_VALUE);
     }
 
-    private void saveCommandHistory(RequestSlashCommand request) {
-        SlackCommandHistory history = SlackCommandHistory.of(request);
-        historyRepository.save(history);
-    }
 }
+
