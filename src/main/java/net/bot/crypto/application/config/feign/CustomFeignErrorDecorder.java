@@ -3,23 +3,30 @@ package net.bot.crypto.application.config.feign;
 import feign.Response;
 import feign.RetryableException;
 import feign.codec.ErrorDecoder;
-import net.bot.crypto.application.aop.exception.ServiceFailedException;
+import lombok.extern.slf4j.Slf4j;
+import net.bot.crypto.application.aop.exception.ExternalApiException;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 import static net.bot.crypto.application.aop.exception.ExceptionStatus.*;
 
-
+@Slf4j
 public class CustomFeignErrorDecorder implements ErrorDecoder {
 
     @Override
     public Exception decode(String methodKey, Response response) {
         if (isServerError(response)) {
+            loggingError(response);
             handleRetryAfterHeader(response);
-            throw new ServiceFailedException(EXTERNAL_API_ERROR);
+            throw new ExternalApiException(EXTERNAL_API_ERROR_5XX);
         }
         if (isClientError(response)) {
-            throw new ServiceFailedException(FAILED_HTTP_REQUEST);
+            loggingError(response);
+            throw new ExternalApiException(EXTERNAL_API_ERROR_4XX);
         }
-        throw new ServiceFailedException(UNKNOWN_ERROR);
+        loggingError(response);
+        throw new ExternalApiException(EXTERNAL_API_ERROR_UNKOWN);
     }
 
     private boolean isClientError(Response response) {
@@ -34,6 +41,19 @@ public class CustomFeignErrorDecorder implements ErrorDecoder {
         if (response.headers().containsKey("Retry-After")) {
             String retryAfter = response.headers().get("Retry-After").iterator().next();
             throw new RetryableException(response.status(), response.reason(), response.request().httpMethod(), Long.parseLong(retryAfter), response.request());
+        }
+    }
+
+    private void loggingError(Response response) {
+        log.error("Feign Error: status={}, reason={}, body={}",
+                response.status(), response.reason(), new String(getResponseBody(response)));
+    }
+
+    private byte[] getResponseBody(Response response) {
+        try (InputStream is = response.body().asInputStream()) {
+            return is.readAllBytes();
+        } catch (IOException e) {
+            throw new IllegalArgumentException("Failed to read response body", e);
         }
     }
 
