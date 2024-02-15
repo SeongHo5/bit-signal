@@ -3,14 +3,14 @@ package net.bot.crypto.application.aop.exception.handler;
 import io.lettuce.core.RedisException;
 import lombok.extern.slf4j.Slf4j;
 import net.bot.crypto.application.aop.exception.ApiException;
-import net.bot.crypto.core.domain.response.ErrorResponse;
-import net.bot.crypto.core.domain.response.ResponseHandler;
+import net.bot.crypto.domain.ErrorResponse;
+import net.bot.crypto.domain.ResponseHandler;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import static net.bot.crypto.core.domain.response.ResponseHandler.createResponse;
+import static net.bot.crypto.domain.ResponseHandler.createResponse;
 
 @Slf4j
 @RestControllerAdvice

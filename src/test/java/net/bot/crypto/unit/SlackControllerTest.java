@@ -1,6 +1,6 @@
 package net.bot.crypto.unit;
 
-import net.bot.crypto.application.domain.dto.request.RequestSlashCommand;
+import net.bot.crypto.domain.dto.request.RequestSlashCommand;
 import net.bot.crypto.application.slack.controller.SlackController;
 import net.bot.crypto.application.slack.service.SlackCommandDispatcher;
 import org.junit.jupiter.api.BeforeEach;

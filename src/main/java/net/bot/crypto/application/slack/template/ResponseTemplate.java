@@ -2,8 +2,8 @@ package net.bot.crypto.application.slack.template;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
-import net.bot.crypto.application.domain.dto.response.MarketList;
-import net.bot.crypto.application.domain.dto.response.MarketPrice;
+import net.bot.crypto.domain.dto.response.MarketList;
+import net.bot.crypto.domain.dto.response.MarketPrice;
 
 import java.math.BigDecimal;
 import java.util.List;

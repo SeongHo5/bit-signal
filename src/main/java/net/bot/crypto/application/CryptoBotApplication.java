@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import java.util.TimeZone;
 
 @EnableJpaAuditing
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = "net.bot.crypto")
 public class CryptoBotApplication {
 
     public static void main(String[] args) {

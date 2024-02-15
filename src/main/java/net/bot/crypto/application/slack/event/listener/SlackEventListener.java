@@ -2,10 +2,10 @@ package net.bot.crypto.application.slack.event.listener;
 
 import lombok.RequiredArgsConstructor;
 import net.bot.crypto.application.common.service.RedisService;
-import net.bot.crypto.application.domain.dto.request.RequestSlackMessage;
-import net.bot.crypto.application.domain.entity.SlackNotificationHistory;
+import net.bot.crypto.domain.dto.request.RequestSlackMessage;
+import net.bot.crypto.domain.entity.SlackNotificationHistory;
 import net.bot.crypto.application.slack.event.SlackNotificationEvent;
-import net.bot.crypto.application.slack.repository.SlackNotificationHistoryRepository;
+import net.bot.crypto.infrastructure.repository.SlackNotificationHistoryRepository;
 import net.bot.crypto.application.slack.service.SlackFeignClient;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;

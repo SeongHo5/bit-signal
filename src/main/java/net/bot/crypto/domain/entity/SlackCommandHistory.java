@@ -1,4 +1,4 @@
-package net.bot.crypto.application.domain.entity;
+package net.bot.crypto.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import net.bot.crypto.application.domain.dto.request.RequestSlashCommand;
+import net.bot.crypto.domain.dto.request.RequestSlashCommand;
 import org.hibernate.annotations.Comment;
 
 import static jakarta.persistence.GenerationType.IDENTITY;

@@ -1,4 +1,4 @@
-package net.bot.crypto.core.domain.response;
+package net.bot.crypto.domain;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Builder;

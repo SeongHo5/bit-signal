@@ -1,4 +1,4 @@
-package net.bot.crypto.application.domain.entity;
+package net.bot.crypto.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

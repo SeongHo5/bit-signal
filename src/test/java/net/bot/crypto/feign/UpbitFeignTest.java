@@ -1,8 +1,8 @@
 package net.bot.crypto.feign;
 
 import net.bot.crypto.application.crypto.service.UpbitFeignClient;
-import net.bot.crypto.application.domain.dto.response.MarketList;
-import net.bot.crypto.application.domain.dto.response.MarketPrice;
+import net.bot.crypto.domain.dto.response.MarketList;
+import net.bot.crypto.domain.dto.response.MarketPrice;
 import net.bot.crypto.config.OpenFeignTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DynamicTest;
