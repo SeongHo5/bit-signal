@@ -3,7 +3,7 @@ package net.bot.crypto.application.crypto.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.bot.crypto.application.common.service.RedisService;
-import net.bot.crypto.application.common.service.SchedulingService;
+import net.bot.crypto.application.common.service.SchedulerService;
 import net.bot.crypto.application.domain.dto.response.MarketPrice;
 import net.bot.crypto.application.domain.dto.response.TickerMessage;
 import net.bot.crypto.application.slack.enums.CommandType;
@@ -27,22 +27,22 @@ import static net.bot.crypto.application.slack.template.ResponseTemplate.*;
 public class CryptoScheduledService {
 
     private final RedisService redisService;
-    private final SchedulingService schedulingService;
+    private final SchedulerService schedulerService;
     private final UpbitFeignClient upbitClient;
     private final ApplicationEventPublisher eventPublisher;
 
     public void startCurrenyInfoTask() {
-        schedulingService.startScheduledTask(this::fetchCurrencyInfo, Duration.ofMinutes(1));
+        schedulerService.startScheduledTask(this::fetchCurrencyInfo, Duration.ofMinutes(1));
         publishNotificationEvent(INFO, MESSAGE_WHEN_INFO_START);
     }
 
     public void startCurrencyAlarmTask() {
-        schedulingService.startScheduledTask(this::fetchTradePrice, Duration.ofSeconds(5));
+        schedulerService.startScheduledTask(this::fetchTradePrice, Duration.ofSeconds(5));
         publishNotificationEvent(ALARM, MESSAGE_WHEN_ALARM_START);
     }
 
     public void stopScheduledTask() {
-        schedulingService.stopScheduledTask();
+        schedulerService.stopScheduledTask();
     }
 
     // ========== PRIVATE METHODS ========== //

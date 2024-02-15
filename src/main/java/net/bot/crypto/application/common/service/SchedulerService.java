@@ -8,12 +8,12 @@ import java.time.Duration;
 import java.util.concurrent.ScheduledFuture;
 
 @Service
-public class SchedulingService {
+public class SchedulerService {
 
     private final TaskScheduler taskScheduler;
     private ScheduledFuture<?> scheduledFuture;
 
-    public SchedulingService(@Qualifier("taskScheduler") TaskScheduler taskScheduler) {
+    public SchedulerService(@Qualifier("taskScheduler") TaskScheduler taskScheduler) {
         this.taskScheduler = taskScheduler;
     }
 
