@@ -16,8 +16,11 @@
 
 ---
 
-## 기술 스택
+## 🔧 기술 스택
 ![tech-stack.png](./docs/images/tech-stack.png)
+
+
+### ✒️ 기술적 의사 결정
 
 <details>
 <summary>OpenFeign</summary>
