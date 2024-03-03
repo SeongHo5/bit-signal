@@ -20,7 +20,7 @@ public class SlackEventListener {
     private final RedisService redisService;
     private final SlackNotificationHistoryRepository historyRepository;
 
-    @EventListener
+    @EventListener(classes = SlackNotificationEvent.class)
     public void handleNotificationEvent(SlackNotificationEvent event) {
         String channelId = getChannelId(event);
         saveNotificationHistory(event, channelId);

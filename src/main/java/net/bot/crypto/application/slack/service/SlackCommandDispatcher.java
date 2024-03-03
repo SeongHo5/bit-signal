@@ -44,7 +44,7 @@ public class SlackCommandDispatcher {
         if (command.startsWith(COMMAND_PREFIX)) {
             return command.substring(COMMAND_PREFIX.length());
         }
-        throw new NoSuchServiceException(INVALID_INPUT_VALUE);
+        throw new NoSuchServiceException(NO_SUCH_COMMAND);
     }
 
 }
