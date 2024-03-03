@@ -5,7 +5,6 @@ import net.bot.crypto.application.aop.exception.NoSuchServiceException;
 import net.bot.crypto.domain.dto.request.RequestSlashCommand;
 import org.springframework.stereotype.Service;
 
-import static net.bot.crypto.application.aop.exception.ExceptionStatus.INVALID_INPUT_VALUE;
 import static net.bot.crypto.application.aop.exception.ExceptionStatus.NO_SUCH_COMMAND;
 import static net.bot.crypto.application.slack.constant.SlackContstant.*;
 @Service
